@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class DamagePlayer : MonoBehaviour
 {
+
     // Start is called before the first frame update
     void Start()
     {
