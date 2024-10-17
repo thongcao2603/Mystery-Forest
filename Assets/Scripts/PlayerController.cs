@@ -16,10 +16,12 @@ public class PlayerController : MonoBehaviour
     bool canDoubleJump;
 
     Rigidbody2D rigi;
+    Animator anim;
 
     private void Awake()
     {
         rigi = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
     // Start is called before the first frame update
     void Start()
@@ -32,12 +34,24 @@ public class PlayerController : MonoBehaviour
     {
         IsGrounded();
         Movement();
-        Debug.Log(canDoubleJump);
     }
 
     void Movement()
     {
+        if (velocity.y < 0 && isGrounded)
+        {
+            velocity.y = -2f;
+        }
         float x = Input.GetAxis("Horizontal");
+
+        if (x > 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (x < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
         velocity.x = x * speed;
 
         if (isGrounded)
@@ -57,8 +71,10 @@ public class PlayerController : MonoBehaviour
             }
         }
         velocity.y += gravity * Time.deltaTime;
-
+        anim.SetFloat("moveSpeed", Mathf.Abs(velocity.x));
+        anim.SetBool("isGrounded", isGrounded);
         rigi.velocity = velocity;
+
     }
 
     void IsGrounded()
